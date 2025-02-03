@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful EMI Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #74ebd5, #9face6);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .calculator {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .calculator h2 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h2>EMI Calculator</h2>
+        <div class="form-group">
+            <label for="principal">Loan Amount (Principal) in ₹:</label>
+            <input type="number" id="principal" placeholder="Enter loan amount">
+        </div>
+        <div class="form-group">
+            <label for="rate">Annual Interest Rate (%):</label>
+            <input type="number" step="0.01" id="rate" placeholder="Enter annual interest rate">
+        </div>
+        <div class="form-group">
+            <label for="time">Loan Tenure (Years):</label>
+            <input type="number" id="time" placeholder="Enter tenure in years">
+        </div>
+        <button class="btn" onclick="calculateEMI()">Calculate EMI</button>
+        <div class="result" id="result">Your EMI will appear here</div>
+    </div>
+
+    <script type="text/javascript">
+        function calculateEMI() {
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value);
+            const time = parseInt(document.getElementById('time').value);
+
+            if (isNaN(principal) || isNaN(rate) || isNaN(time) || principal <= 0 || rate <= 0 || time <= 0) {
+                document.getElementById('result').textContent = 'Please enter valid inputs!';
+                return;
+            }
+
+            // Convert annual interest rate to monthly and loan tenure to months
+            const monthlyRate = rate / 12 / 100;
+            const totalMonths = time * 12;
+
+            // EMI Formula
+            const emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
+                        (Math.pow(1 + monthlyRate, totalMonths) - 1);
+
+            // Display EMI
+            document.getElementById('result').innerHTML = `
+                <strong>EMI:</strong> ₹${emi.toFixed(2)}<br>
+                <strong>Total Payment:</strong> ₹${(emi * totalMonths).toFixed(2)}<br>
+                <strong>Total Interest:</strong> ₹${((emi * totalMonths) - principal).toFixed(2)}
+            `;
+        }
+    </script>
+</body>
+</html>
